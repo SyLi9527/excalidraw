@@ -137,6 +137,9 @@ import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
 import "./index.scss";
 
+import { ExcalidrawPlusAppLink } from "./components/ExcalidrawPlusAppLink";
+import { AppSidebar } from "./components/AppSidebar";
+
 import type { CollabAPI } from "./collab/Collab";
 
 polyfill();
@@ -850,6 +853,7 @@ const ExcalidrawWrapper = () => {
           }
           return (
             <div className="top-right-ui">
+              <ExcalidrawPlusAppLink isSignedIn={isExcalidrawPlusSignedUser} />
               {collabError.message && <CollabError collabError={collabError} />}
               <LiveCollaborationTrigger
                 isCollaborating={isCollaborating}
@@ -940,6 +944,8 @@ const ExcalidrawWrapper = () => {
             }
           }}
         />
+
+        <AppSidebar />
 
         {errorMessage && (
           <ErrorDialog onClose={() => setErrorMessage("")}>

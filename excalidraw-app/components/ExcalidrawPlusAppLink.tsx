@@ -1,19 +1,22 @@
-import { isExcalidrawPlusSignedUser } from "../app_constants";
-
-export const ExcalidrawPlusAppLink = () => {
-  if (!isExcalidrawPlusSignedUser) {
-    return null;
-  }
+export const ExcalidrawPlusAppLink = ({
+  isSignedIn,
+}: {
+  isSignedIn: boolean;
+}) => {
   return (
     <a
       href={`${
-        import.meta.env.VITE_APP_PLUS_APP
-      }?utm_source=excalidraw&utm_medium=app&utm_content=signedInUserRedirectButton#excalidraw-redirect`}
+        isSignedIn
+          ? import.meta.env.VITE_APP_PLUS_LP
+          : import.meta.env.VITE_APP_PLUS_APP
+      }/plus?utm_source=excalidraw&utm_medium=app&utm_content=${
+        isSignedIn ? "signedInBanner" : "guestBanner"
+      }#excalidraw-redirect`}
       target="_blank"
       rel="noopener"
-      className="plus-button"
+      className="plus-banner"
     >
-      Go to Excalidraw+
+      Excalidraw+
     </a>
   );
 };
