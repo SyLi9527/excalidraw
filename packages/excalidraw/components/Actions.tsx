@@ -746,6 +746,7 @@ const CombinedExtraActions = ({
                   {renderAction("ungroup")}
                   {showLinkIcon && renderAction("hyperlink")}
                   {showCropEditorAction && renderAction("cropEditor")}
+                  {renderAction("breakApartSvg")}
                   {showDuplicate && renderAction("duplicateSelection")}
                   {showDelete && renderAction("deleteSelectedElements")}
                 </div>

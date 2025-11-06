@@ -237,7 +237,8 @@
     "publishLibrary": "重命名或发布",
     "submit": "提交",
     "confirm": "确定",
-    "embeddableInteractionButton": "点击以开始交互"
+    "embeddableInteractionButton": "点击以开始交互",
+    "breakApartSvg": "将 SVG 拆分为多个元素"
   },
   "alerts": {
     "clearReset": "这将会清除整个画布。您是否要继续?",
