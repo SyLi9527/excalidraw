@@ -44,7 +44,6 @@ import { getSelectedElements } from "../../scene";
 import {
   LockedIcon,
   UnlockedIcon,
-  clockIcon,
   searchIcon,
   boltIcon,
   bucketFillIcon,
@@ -52,6 +51,7 @@ import {
   mermaidLogoIcon,
   brainIconThin,
   LibraryIcon,
+  historyCommandIcon,
 } from "../icons";
 
 import { SHAPES } from "../shapes";
@@ -928,7 +928,7 @@ function CommandPaletteInner({
                   marginLeft: "6px",
                 }}
               >
-                {clockIcon}
+                {historyCommandIcon}
               </div>
             </div>
             <CommandItem
@@ -1034,7 +1034,7 @@ const CommandItem = ({
             size="var(--icon-size, 1rem)"
             icon={
               typeof command.icon === "function"
-                ? command.icon(appState)
+                ? command.icon(appState, [])
                 : command.icon
             }
           />

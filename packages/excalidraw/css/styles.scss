@@ -1,5 +1,5 @@
-@import "./variables.module.scss";
-@import "./theme";
+@use "./variables.module" as *;
+@use "./theme";
 
 :root {
   --zIndex-canvas: 1;
@@ -13,10 +13,10 @@
   --zIndex-hyperlinkContainer: 7;
 
   --zIndex-ui-bottom: 60;
-  --zIndex-ui-library: 80;
   --zIndex-ui-context-menu: 90;
   --zIndex-ui-styles-popup: 100;
   --zIndex-ui-top: 100;
+  --zIndex-ui-library: 120;
 
   --zIndex-modal: 1000;
   --zIndex-popup: 1001;
@@ -49,6 +49,11 @@ body.excalidraw-cursor-resize * {
   right: 0;
   height: 100%;
   width: 100%;
+
+  button {
+    // browser default. Looks kinda good on low-dpi.
+    font-size: 0.8333rem;
+  }
 
   button,
   label {
@@ -101,6 +106,9 @@ body.excalidraw-cursor-resize * {
 
     &.interactive {
       z-index: var(--zIndex-interactiveCanvas);
+      // Apply theme filter only to interactive canvas for UI elements
+      // (resize handles, selection boxes, etc.)
+      filter: var(--theme-filter);
     }
 
     // Remove the main canvas from document flow to avoid resizeObserver
@@ -127,16 +135,6 @@ body.excalidraw-cursor-resize * {
     z-index: 2;
     transform-origin: top left;
     pointer-events: none;
-  }
-
-  &.theme--dark {
-    // The percentage is inspired by
-    // https://material.io/design/color/dark-theme.html#properties, which
-    // recommends surface color of #121212, 93% yields #111111 for #FFF
-
-    canvas {
-      filter: var(--theme-filter);
-    }
   }
 
   .FixedSideContainer {
@@ -212,7 +210,7 @@ body.excalidraw-cursor-resize * {
 
   .divider {
     width: 1px;
-    background-color: $oc-gray-2;
+    background-color: $color-gray-2;
     margin: 1px;
   }
 
@@ -708,6 +706,11 @@ body.excalidraw-cursor-resize * {
       margin-top: 0rem;
     }
   }
+
+  .link-button {
+    display: flex;
+    text-decoration: none !important;
+  }
 }
 
 .ErrorSplash.excalidraw {
@@ -726,8 +729,8 @@ body.excalidraw-cursor-resize * {
     justify-content: center;
 
     padding: 40px;
-    background-color: $oc-red-1;
-    border: 3px solid $oc-red-9;
+    background-color: $color-red-1;
+    border: 3px solid $color-red-9;
   }
 
   .ErrorSplash-paragraph {

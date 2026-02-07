@@ -341,6 +341,7 @@
     "canvasPanning": "Tuvali taşımak için {{shortcut_1}} kısayolunu basılı tutun, sürüklerken {{shortcut_2}} kısayolunu veya el aracını kullanın",
     "linearElement": "Birden fazla nokta için tıklayın, tek çizgi için sürükleyin",
     "arrowTool": "Birden çok nokta başlatmak için tıklayın, tek bir çizgi için sürükleyin. Ok türünü değiştirmek için {{shortcut}} kısayoluna basın.",
+    "arrowBindModifiers": "",
     "freeDraw": "Tıkla ve sürükle, bitirdiğinde serbest bırak",
     "text": "İpucu: seçme aracıyla herhangi bir yere çift tıklayarak da yazı ekleyebilirsin",
     "embeddable": "Web sitesi yerleştirmek için sürükle bırak",
@@ -556,7 +557,9 @@
   },
   "welcomeScreen": {
     "app": {
-      "center_heading": "Tüm verileriniz tarayıcınızda yerel olarak kaydedilir.",
+      "center_heading": "",
+      "center_heading_line2": "",
+      "center_heading_line3": "",
       "center_heading_plus": "Ecalidraw+'a mı gitmek istediniz?",
       "menuHint": "Dışa aktar, seçenekler, diller, ..."
     },
@@ -611,7 +614,55 @@
     "button": "Ekle",
     "description": "Şu anda yalnızca <flowchartLink>Akış şeması</flowchartLink>,<sequenceLink> Dizi, </sequenceLink> ve <classLink>Sınıf </classLink>Diyagramları deskteklenmektedir. Diğer türler, Excalidraw'da görsel olarak çizilecektir.",
     "syntax": "Mermaid Sözdizimi",
-    "preview": "Önizleme"
+    "preview": "Önizleme",
+    "label": "",
+    "inputPlaceholder": ""
+  },
+  "ttd": {
+    "error": ""
+  },
+  "chat": {
+    "inputPlaceholder": "",
+    "inputPlaceholderWithMessages": "",
+    "generating": "",
+    "rateLimitRemaining": "",
+    "role": {
+      "user": "",
+      "assistant": "",
+      "system": ""
+    },
+    "aiBeta": "",
+    "label": "",
+    "menu": "",
+    "newChat": "",
+    "deleteChat": "",
+    "deleteMessage": "",
+    "viewAsMermaid": "",
+    "placeholder": {
+      "title": "",
+      "description": "",
+      "hint": ""
+    },
+    "preview": "",
+    "insert": "",
+    "retry": "",
+    "errors": {
+      "promptTooShort": "",
+      "promptTooLong": "",
+      "generationFailed": "",
+      "invalidDiagram": "",
+      "fixInMermaid": "",
+      "aiRepair": "",
+      "requestAborted": "",
+      "requestFailed": "",
+      "mermaidParseError": ""
+    },
+    "rateLimit": {
+      "messageLimit": "",
+      "generalRateLimit": "",
+      "messageLimitInputPlaceholder": ""
+    },
+    "upsellBtnLabel": ""
   },
   "quickSearch": {
     "placeholder": "Hızlı arama"

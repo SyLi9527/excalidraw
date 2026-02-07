@@ -4,7 +4,6 @@ import React from "react";
 import {
   CLASSES,
   DEFAULT_SIDEBAR,
-  MQ_MIN_WIDTH_DESKTOP,
   TOOL_TYPE,
   arrayToMap,
   capitalizeString,
@@ -48,7 +47,7 @@ import MainMenu from "./main-menu/MainMenu";
 import { ActiveConfirmDialog } from "./ActiveConfirmDialog";
 import { useEditorInterface, useStylesPanelMode } from "./App";
 import { OverwriteConfirmDialog } from "./OverwriteConfirm/OverwriteConfirm";
-import { LibraryIcon } from "./icons";
+import { sidebarRightIcon } from "./icons";
 import { DefaultSidebar } from "./DefaultSidebar";
 import { TTDDialog } from "./TTDDialog/TTDDialog";
 import { Stats } from "./Stats";
@@ -473,7 +472,7 @@ const LayerUI = ({
       <DefaultMainMenu UIOptions={UIOptions} />
       <DefaultSidebar.Trigger
         __fallback
-        icon={LibraryIcon}
+        icon={sidebarRightIcon}
         title={capitalizeString(t("toolBar.library"))}
         onToggle={(open) => {
           if (open) {
@@ -487,11 +486,7 @@ const LayerUI = ({
           }
         }}
         tab={DEFAULT_SIDEBAR.defaultTab}
-      >
-        {stylesPanelMode === "full" &&
-          appState.width >= MQ_MIN_WIDTH_DESKTOP &&
-          t("toolBar.library")}
-      </DefaultSidebar.Trigger>
+      />
       <DefaultOverwriteConfirmDialog />
       {appState.openDialog?.name === "ttd" && <TTDDialog __fallback />}
       {/* ------------------------------------------------------------------ */}
@@ -651,14 +646,8 @@ const LayerUI = ({
 };
 
 const stripIrrelevantAppStateProps = (appState: AppState): UIAppState => {
-  const {
-    suggestedBindings,
-    startBoundElement,
-    cursorButton,
-    scrollX,
-    scrollY,
-    ...ret
-  } = appState;
+  const { startBoundElement, cursorButton, scrollX, scrollY, ...ret } =
+    appState;
   return ret;
 };
 

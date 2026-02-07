@@ -342,6 +342,7 @@
     "canvasPanning": "要移动画布，请按住{{shortcut_1}}或{{shortcut_2}}同时拖拽鼠标，或使用抓手工具。",
     "linearElement": "点击创建多个点 拖动创建直线",
     "arrowTool": "点击创建多个点，拖动创建直线。按 {{shortcut}} 切换箭头类型。",
+    "arrowBindModifiers": "",
     "freeDraw": "点击并拖动，完成时松开",
     "text": "提示：您也可以使用选择工具双击任意位置来添加文字",
     "embeddable": "点击并拖动以创建嵌入网页",
@@ -557,7 +558,9 @@
   },
   "welcomeScreen": {
     "app": {
-      "center_heading": "您的所有数据都储存在浏览器本地。",
+      "center_heading": "",
+      "center_heading_line2": "",
+      "center_heading_line3": "",
       "center_heading_plus": "是否前往 Excalidraw+ ？",
       "menuHint": "导出、首选项、语言……"
     },
@@ -612,7 +615,55 @@
     "button": "插入",
     "description": "目前仅支持<flowchartLink>流程图</flowchartLink>、<sequenceLink>序列图</sequenceLink>和<classLink>类图</classLink>。其他类型在 Excalidraw 中将以图像呈现。",
     "syntax": "Mermaid 语法",
-    "preview": "预览"
+    "preview": "预览",
+    "label": "",
+    "inputPlaceholder": ""
+  },
+  "ttd": {
+    "error": ""
+  },
+  "chat": {
+    "inputPlaceholder": "",
+    "inputPlaceholderWithMessages": "",
+    "generating": "",
+    "rateLimitRemaining": "",
+    "role": {
+      "user": "",
+      "assistant": "",
+      "system": ""
+    },
+    "aiBeta": "",
+    "label": "",
+    "menu": "",
+    "newChat": "",
+    "deleteChat": "",
+    "deleteMessage": "",
+    "viewAsMermaid": "",
+    "placeholder": {
+      "title": "",
+      "description": "",
+      "hint": ""
+    },
+    "preview": "",
+    "insert": "",
+    "retry": "",
+    "errors": {
+      "promptTooShort": "",
+      "promptTooLong": "",
+      "generationFailed": "",
+      "invalidDiagram": "",
+      "fixInMermaid": "",
+      "aiRepair": "",
+      "requestAborted": "",
+      "requestFailed": "",
+      "mermaidParseError": ""
+    },
+    "rateLimit": {
+      "messageLimit": "",
+      "generalRateLimit": "",
+      "messageLimitInputPlaceholder": ""
+    },
+    "upsellBtnLabel": ""
   },
   "quickSearch": {
     "placeholder": "快速搜索"

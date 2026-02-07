@@ -341,6 +341,7 @@
     "canvasPanning": "",
     "linearElement": "Ấn để bắt đầu nhiểm điểm vẽ, kéo để vẽ một đường thẳng",
     "arrowTool": "",
+    "arrowBindModifiers": "",
     "freeDraw": "Ấn bà kéo, thả khi bạn xong",
     "text": "Mẹo: bạn có thể thêm văn bản tại bất cứ đâu bằng cách ấn hai lần bằng tool lựa chọn",
     "embeddable": "Nhấp và kéo để tạo nội dung nhúng từ website.",
@@ -350,13 +351,13 @@
     "lockAngle": "",
     "resize": "",
     "resizeImage": "",
-    "rotate": "",
+    "rotate": "Giới hạn góc độ bằng cách giữ {{shortcut}} khi xoay",
     "lineEditor_info": "",
     "lineEditor_line_info": "",
     "lineEditor_pointSelected": "",
     "lineEditor_nothingSelected": "",
     "publishLibrary": "Chia sẻ thư viện của bạn",
-    "bindTextToElement": "",
+    "bindTextToElement": "Nhấn {{shortcut}} để thêm văn bản",
     "createFlowchart": "",
     "deepBoxSelect": "",
     "eraserRevert": "",
@@ -557,6 +558,8 @@
   "welcomeScreen": {
     "app": {
       "center_heading": "",
+      "center_heading_line2": "",
+      "center_heading_line3": "",
       "center_heading_plus": "",
       "menuHint": ""
     },
@@ -611,7 +614,55 @@
     "button": "",
     "description": "",
     "syntax": "",
-    "preview": ""
+    "preview": "",
+    "label": "",
+    "inputPlaceholder": ""
+  },
+  "ttd": {
+    "error": ""
+  },
+  "chat": {
+    "inputPlaceholder": "",
+    "inputPlaceholderWithMessages": "",
+    "generating": "",
+    "rateLimitRemaining": "",
+    "role": {
+      "user": "",
+      "assistant": "",
+      "system": ""
+    },
+    "aiBeta": "",
+    "label": "",
+    "menu": "",
+    "newChat": "",
+    "deleteChat": "",
+    "deleteMessage": "",
+    "viewAsMermaid": "",
+    "placeholder": {
+      "title": "",
+      "description": "",
+      "hint": ""
+    },
+    "preview": "",
+    "insert": "",
+    "retry": "",
+    "errors": {
+      "promptTooShort": "",
+      "promptTooLong": "",
+      "generationFailed": "",
+      "invalidDiagram": "",
+      "fixInMermaid": "",
+      "aiRepair": "",
+      "requestAborted": "",
+      "requestFailed": "",
+      "mermaidParseError": ""
+    },
+    "rateLimit": {
+      "messageLimit": "",
+      "generalRateLimit": "",
+      "messageLimitInputPlaceholder": ""
+    },
+    "upsellBtnLabel": ""
   },
   "quickSearch": {
     "placeholder": ""

@@ -142,8 +142,8 @@
       "editArrow": "Modifica freccia"
     },
     "polygon": {
-      "breakPolygon": "",
-      "convertToPolygon": ""
+      "breakPolygon": "Interrompi poligono",
+      "convertToPolygon": "Converti in poligono"
     },
     "elementLock": {
       "lock": "Blocca",
@@ -170,8 +170,8 @@
     "copyElementLink": "Copia il link all'oggetto",
     "linkToElement": "Link all'oggetto",
     "wrapSelectionInFrame": "Avvolgi la selezione nella cornice",
-    "tab": "",
-    "shapeSwitch": ""
+    "tab": "Scheda",
+    "shapeSwitch": "Cambia forma"
   },
   "elementLink": {
     "title": "Link all'oggetto",
@@ -183,10 +183,10 @@
     "hint_emptyLibrary": "Seleziona un elemento sulla tela per aggiungerlo qui, o installa una libreria dal repository pubblico qui sotto.",
     "hint_emptyPrivateLibrary": "Seleziona un elemento sulla tela per aggiungerlo qui.",
     "search": {
-      "inputPlaceholder": "",
-      "heading": "",
-      "noResults": "",
-      "clearSearch": ""
+      "inputPlaceholder": "Cerca libreria",
+      "heading": "Corrispondenze libreria",
+      "noResults": "Nessun articolo corrispondente trovato...",
+      "clearSearch": "Pulisci ricerca"
     }
   },
   "search": {
@@ -195,8 +195,8 @@
     "singleResult": "risultato",
     "multipleResults": "risultati",
     "placeholder": "Trova testo sulla tela...",
-    "frames": "",
-    "texts": ""
+    "frames": "Fotogrammi",
+    "texts": "Testi"
   },
   "buttons": {
     "clearReset": "Svuota la tela",
@@ -230,11 +230,11 @@
     "objectsSnapMode": "Aggancia agli oggetti",
     "exitZenMode": "Uscire dalla modalità zen",
     "cancel": "Annulla",
-    "saveLibNames": "",
+    "saveLibNames": "Salva nome(i) ed esci",
     "clear": "Cancella",
     "remove": "Rimuovi",
     "embed": "Attiva/disattiva incorporamento",
-    "publishLibrary": "",
+    "publishLibrary": "Rinomina o pubblica",
     "submit": "Invia",
     "confirm": "Conferma",
     "embeddableInteractionButton": "Clicca per interagire"
@@ -261,7 +261,7 @@
     "removeItemsFromsLibrary": "Eliminare {{count}} elementi dalla libreria?",
     "invalidEncryptionKey": "La chiave di cifratura deve essere composta da 22 caratteri. La collaborazione live è disabilitata.",
     "collabOfflineWarning": "Nessuna connessione internet disponibile.\nLe tue modifiche non verranno salvate!",
-    "localStorageQuotaExceeded": ""
+    "localStorageQuotaExceeded": "Quota di archiviazione del browser superata. Le modifiche non verranno salvate."
   },
   "errors": {
     "unsupportedFileType": "Tipo di file non supportato.",
@@ -292,7 +292,7 @@
   },
   "toolBar": {
     "selection": "Selezione",
-    "lasso": "",
+    "lasso": "Selezione a lazo",
     "image": "Inserisci immagine",
     "rectangle": "Rettangolo",
     "diamond": "Rombo",
@@ -313,7 +313,7 @@
     "hand": "Mano (strumento di panoramica)",
     "extraTools": "Altri strumenti",
     "mermaidToExcalidraw": "Da Mermaid a Excalidraw",
-    "convertElementType": ""
+    "convertElementType": "Attiva tipo di forma"
   },
   "element": {
     "rectangle": "Rettangolo",
@@ -337,33 +337,34 @@
     "shapes": "Forme"
   },
   "hints": {
-    "dismissSearch": "",
-    "canvasPanning": "",
+    "dismissSearch": "{{shortcut}} per ignorare la ricerca",
+    "canvasPanning": "Per spostare la tela, tieni premuto {{shortcut_1}} o {{shortcut_2}} durante il trascinamento, oppure usa lo strumento della mano",
     "linearElement": "Clicca per iniziare una linea in più punti, trascina per singola linea",
-    "arrowTool": "",
+    "arrowTool": "Fai clic per iniziare più punti, trascina per una singola linea. Premi di nuovo {{shortcut}} per cambiare il tipo di freccia.",
+    "arrowBindModifiers": "Tieni premuto {{shortcut_1}} per disabilitare il binding, oppure {{shortcut_2}} per il binding a un punto fisso",
     "freeDraw": "Clicca e trascina, rilascia quando avrai finito",
     "text": "Suggerimento: puoi anche aggiungere del testo facendo doppio clic ovunque con lo strumento di selezione",
     "embeddable": "Fare click e trascina per creare un incorporamento web",
-    "text_selected": "",
-    "text_editing": "",
-    "linearElementMulti": "",
-    "lockAngle": "",
-    "resize": "",
-    "resizeImage": "",
-    "rotate": "",
-    "lineEditor_info": "",
-    "lineEditor_line_info": "",
-    "lineEditor_pointSelected": "",
-    "lineEditor_nothingSelected": "",
+    "text_selected": "Fare doppio clic o premere {{shortcut}} per modificare il testo",
+    "text_editing": "Premi {{shortcut_1}} o {{shortcut_2}} per terminare la modifica",
+    "linearElementMulti": "Clicca sull'ultimo punto o premi {{shortcut_1}} o {{shortcut_2}} per terminare",
+    "lockAngle": "Puoi limitare l'angolo tenendo premuto {{shortcut}}",
+    "resize": "Puoi limitare le proporzioni tenendo premuto {{shortcut_1}} durante il ridimensionamento,\ntenendo premuto {{shortcut_2}} per ridimensionare dal centro",
+    "resizeImage": "Puoi ridimensionare liberamente tenendo premuto {{shortcut_1}},\ntenendo premuto {{shortcut_2}} per ridimensionare dal centro",
+    "rotate": "Puoi limitare gli angoli tenendo premuto {{shortcut}} durante la rotazione",
+    "lineEditor_info": "Tieni premuto {{shortcut_1}} e fai doppio clic oppure premi {{shortcut_2}} per modificare i punti",
+    "lineEditor_line_info": "Fare doppio clic o premere {{shortcut}} per modificare i punti",
+    "lineEditor_pointSelected": "Premi {{shortcut_1}} per rimuovere punto(i),\n{{shortcut_2}} per duplicare, o trascinare per spostare",
+    "lineEditor_nothingSelected": "Seleziona un punto da modificare (tieni premuto {{shortcut_1}} per selezionarne più di uno),\noppure tieni premuto {{shortcut_2}} e fai clic per aggiungere nuovi punti",
     "publishLibrary": "Pubblica la tua libreria",
-    "bindTextToElement": "",
-    "createFlowchart": "",
-    "deepBoxSelect": "",
-    "eraserRevert": "",
+    "bindTextToElement": "{{shortcut}} per aggiungere testo",
+    "createFlowchart": "{{shortcut}} per creare un diagramma di flusso",
+    "deepBoxSelect": "Tieni premuto {{shortcut}} per selezionare in profondità e per evitare il trascinamento",
+    "eraserRevert": "Tieni premuto {{shortcut}} per ripristinare gli elementi contrassegnati per l'eliminazione",
     "firefox_clipboard_write": "Questa funzione può essere abilitata impostando il flag \"dom.events.asyncClipboard.clipboardItem\" su \"true\". Per modificare i flag del browser in Firefox, visitare la pagina \"about:config\".",
-    "disableSnapping": "",
-    "enterCropEditor": "",
-    "leaveCropEditor": ""
+    "disableSnapping": "Tieni premuto {{shortcut}} per disattivare lo snap",
+    "enterCropEditor": "Fare doppio clic sull'immagine o premere {{shortcut}} per ritagliare l'immagine",
+    "leaveCropEditor": "Fare clic all'esterno dell'immagine o premere {{shortcut_1}} o {{shortcut_2}} per terminare il ritaglio"
   },
   "canvasError": {
     "cannotShowPreview": "Impossibile visualizzare l'anteprima",
@@ -556,7 +557,9 @@
   },
   "welcomeScreen": {
     "app": {
-      "center_heading": "Tutti i tuoi dati sono salvati localmente nel browser.",
+      "center_heading": "",
+      "center_heading_line2": "",
+      "center_heading_line3": "",
       "center_heading_plus": "Volevi invece andare su Excalidraw+?",
       "menuHint": "Esporta, preferenze, lingue, ..."
     },
@@ -568,7 +571,7 @@
     }
   },
   "colorPicker": {
-    "color": "",
+    "color": "Colore",
     "mostUsedCustomColors": "Colori personalizzati più utilizzati",
     "colors": "Colori",
     "shades": "Sfumature",
@@ -611,7 +614,55 @@
     "button": "Inserisci",
     "description": "Attualmente sono supportati solo diagrammi di <flowchartLink>flusso</flowchartLink>,<sequenceLink> sequenza, </sequenceLink> e <classLink>classe </classLink>. Gli altri tipi saranno rappresentati come immagini in Excalidraw.",
     "syntax": "Sintassi Mermaid",
-    "preview": "Anteprima"
+    "preview": "Anteprima",
+    "label": "Mermaid",
+    "inputPlaceholder": "Scrivi qui la definizione del diagramma Mermaid..."
+  },
+  "ttd": {
+    "error": "Errore!"
+  },
+  "chat": {
+    "inputPlaceholder": "Inizia a digitare qui la tua idea per il diagramma... ({{shortcut}} per una nuova riga)",
+    "inputPlaceholderWithMessages": "Continua a perfezionare il tuo diagramma...",
+    "generating": "Generazione in corso...",
+    "rateLimitRemaining": "{{count}} richieste rimaste oggi",
+    "role": {
+      "user": "Tu",
+      "assistant": "Assistente IA",
+      "system": "Sistema"
+    },
+    "aiBeta": "IA Beta",
+    "label": "Chat",
+    "menu": "Menu",
+    "newChat": "Nuova Chat",
+    "deleteChat": "Elimina Chat",
+    "deleteMessage": "Cancella messaggio",
+    "viewAsMermaid": "Visualizza come Mermaid",
+    "placeholder": {
+      "title": "Progettiamo il tuo diagramma",
+      "description": "Descrivi il diagramma che vuoi creare e noi lo genereremo per te.",
+      "hint": "Al momento conosciamo i diagrammi di flusso, di sequenza e di classe."
+    },
+    "preview": "Anteprima",
+    "insert": "Inserisci",
+    "retry": "Riprova",
+    "errors": {
+      "promptTooShort": "Il prompt è troppo corto (min {{min}} caratteri)",
+      "promptTooLong": "Il prompt è troppo lungo (max {{max}} caratteri)",
+      "generationFailed": "Generazione non riuscita",
+      "invalidDiagram": "È stato generato un diagramma non valido :(. Puoi modificarlo manualmente, riprovare con la correzione automatica o provare un prompt diverso.",
+      "fixInMermaid": "Modifica Mermaid manualmente→",
+      "aiRepair": "Rigenera (correzione automatica) →",
+      "requestAborted": "Richiesta annullata",
+      "requestFailed": "Richiesta non riuscita",
+      "mermaidParseError": "Errore di sintassi Mermaid"
+    },
+    "rateLimit": {
+      "messageLimit": "Hai raggiunto il tuo limite di IA sul piano gratuito. Prova Excalidraw+ per saperne di più o torna domani.",
+      "generalRateLimit": "Fermati, sei troppo veloce per noi! Attendi un attimo prima di riprovare.",
+      "messageLimitInputPlaceholder": "Hai raggiunto il limite di messaggi"
+    },
+    "upsellBtnLabel": "Aggiorna alla Plus"
   },
   "quickSearch": {
     "placeholder": "Ricerca rapida"
@@ -650,15 +701,15 @@
     "shortcutHint": "Per i comandi della tavolozza, usa {{shortcut}}"
   },
   "keys": {
-    "ctrl": "",
-    "option": "",
-    "cmd": "",
-    "alt": "",
-    "escape": "",
-    "enter": "",
-    "shift": "",
-    "spacebar": "",
-    "delete": "",
-    "mmb": ""
+    "ctrl": "Ctrl",
+    "option": "Opzione",
+    "cmd": "Cmd",
+    "alt": "Alt",
+    "escape": "Esc",
+    "enter": "Invio",
+    "shift": "Shift",
+    "spacebar": "Spazio",
+    "delete": "Elimina",
+    "mmb": "Rotella di scorrimento"
   }
 }

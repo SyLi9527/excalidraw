@@ -48,7 +48,11 @@ import {
   youtubeIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { isElementLink } from "@excalidraw/element";
-import { restore, restoreAppState } from "@excalidraw/excalidraw/data/restore";
+import {
+  bumpElementVersions,
+  restoreAppState,
+  restoreElements,
+} from "@excalidraw/excalidraw/data/restore";
 import { newElementWith } from "@excalidraw/element";
 import { isInitializedImageElement } from "@excalidraw/element";
 import clsx from "clsx";
@@ -105,8 +109,8 @@ import { TopErrorBoundary } from "./components/TopErrorBoundary";
 import {
   exportToBackend,
   getCollaborationLinkData,
+  importFromBackend,
   isCollaborationLink,
-  loadScene,
 } from "./data";
 
 import { updateStaleImageStatuses } from "./data/FileManager";
@@ -137,6 +141,9 @@ import { AIComponents } from "./components/AI";
 import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
 import "./index.scss";
+
+import { ExcalidrawPlusPromoBanner } from "./components/ExcalidrawPlusPromoBanner";
+import { AppSidebar } from "./components/AppSidebar";
 
 import type { CollabAPI } from "./collab/Collab";
 
@@ -221,9 +228,20 @@ const initializeScene = async (opts: {
 
   const localDataState = importFromLocalStorage();
 
-  let scene: RestoredDataState & {
+  let scene: Omit<
+    RestoredDataState,
+    // we're not storing files in the scene database/localStorage, and instead
+    // fetch them async from a different store
+    "files"
+  > & {
     scrollToContent?: boolean;
-  } = await loadScene(null, null, localDataState);
+  } = {
+    elements: restoreElements(localDataState?.elements, null, {
+      repairBindings: true,
+      deleteInvisibleElements: true,
+    }),
+    appState: restoreAppState(localDataState?.appState, null),
+  };
 
   let roomLinkData = getCollaborationLinkData(window.location.href);
   const isExternalScene = !!(id || jsonBackendMatch || roomLinkData);
@@ -237,11 +255,26 @@ const initializeScene = async (opts: {
       (await openConfirmModal(shareableLinkConfirmDialog))
     ) {
       if (jsonBackendMatch) {
-        scene = await loadScene(
+        const imported = await importFromBackend(
           jsonBackendMatch[1],
           jsonBackendMatch[2],
-          localDataState,
         );
+
+        scene = {
+          elements: bumpElementVersions(
+            restoreElements(imported.elements, null, {
+              repairBindings: true,
+              deleteInvisibleElements: true,
+            }),
+            localDataState?.elements,
+          ),
+          appState: restoreAppState(
+            imported.appState,
+            // local appState when importing from backend to ensure we restore
+            // localStorage user settings which we do not persist on server.
+            localDataState?.appState,
+          ),
+        };
       }
       scene.scrollToContent = true;
       if (!roomLinkData) {
@@ -493,8 +526,10 @@ const ExcalidrawWrapper = () => {
           loadImages(data);
           if (data.scene) {
             excalidrawAPI.updateScene({
-              ...data.scene,
-              ...restore(data.scene, null, null, { repairBindings: true }),
+              elements: restoreElements(data.scene.elements, null, {
+                repairBindings: true,
+              }),
+              appState: restoreAppState(data.scene.appState, null),
               captureUpdate: CaptureUpdateAction.IMMEDIATELY,
             });
           }
@@ -666,8 +701,8 @@ const ExcalidrawWrapper = () => {
       debugRenderer(
         debugCanvasRef.current,
         appState,
+        elements,
         window.devicePixelRatio,
-        () => forceRefresh((prev) => !prev),
       );
     }
   };
@@ -851,8 +886,15 @@ const ExcalidrawWrapper = () => {
           if (isMobile || !collabAPI || isCollabDisabled) {
             return null;
           }
+
           return (
             <div className="excalidraw-ui-top-right">
+              {excalidrawAPI?.getEditorInterface().formFactor === "desktop" && (
+                <ExcalidrawPlusPromoBanner
+                  isSignedIn={isExcalidrawPlusSignedUser}
+                />
+              )}
+
               {collabError.message && <CollabError collabError={collabError} />}
               <LiveCollaborationTrigger
                 isCollaborating={isCollaborating}
@@ -944,6 +986,8 @@ const ExcalidrawWrapper = () => {
             }
           }}
         />
+
+        <AppSidebar />
 
         {errorMessage && (
           <ErrorDialog onClose={() => setErrorMessage("")}>
