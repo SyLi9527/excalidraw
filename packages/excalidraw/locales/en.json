@@ -703,18 +703,18 @@
   },
   "recording": {
     "title": "Record",
-    "start": "Start recording",
+    "start": "Start Recording",
     "stop": "Stop",
     "pause": "Pause",
     "resume": "Resume",
-    "aspectRatio": "Aspect ratio",
+    "aspectRatio": "Aspect Ratio",
     "background": "Background",
-    "cursorHighlight": "Cursor highlight",
+    "cursorHighlight": "Cursor Highlight",
     "camera": "Camera",
     "teleprompter": "Teleprompter",
     "formatAuto": "Auto",
-    "downloadFailed": "Recording download failed.",
-    "micPermissionDenied": "Microphone permission denied."
+    "downloadFailed": "Recording download failed. Try again.",
+    "micPermissionDenied": "Microphone permission denied. Allow access and try again."
   },
   "keys": {
     "ctrl": "Ctrl",

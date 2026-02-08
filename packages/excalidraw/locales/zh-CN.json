@@ -713,8 +713,8 @@
     "camera": "摄像头",
     "teleprompter": "提词器",
     "formatAuto": "自动",
-    "downloadFailed": "录制下载失败。",
-    "micPermissionDenied": "麦克风权限被拒绝。"
+    "downloadFailed": "录制下载失败，请重试。",
+    "micPermissionDenied": "麦克风权限被拒绝，请在浏览器设置中允许后重试。"
   },
   "keys": {
     "ctrl": "Ctrl",
