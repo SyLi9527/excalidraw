@@ -41,4 +41,26 @@ describe("TeleprompterOverlay", () => {
 
     expect(onTextChange).toHaveBeenCalledWith("Updated");
   });
+
+  it("renders drag handle and text attributes", () => {
+    render(
+      <TeleprompterOverlay
+        enabled
+        text=""
+        opacity={1}
+        speed={40}
+        onTextChange={() => {}}
+        onOpacityChange={() => {}}
+        onSpeedChange={() => {}}
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: /move teleprompter/i }),
+    ).toBeInTheDocument();
+
+    const textarea = screen.getByRole("textbox");
+    expect(textarea).toHaveAttribute("name", "teleprompterText");
+    expect(textarea).toHaveAttribute("autoComplete", "off");
+  });
 });
