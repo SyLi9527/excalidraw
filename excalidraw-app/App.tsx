@@ -408,11 +408,30 @@ const ExcalidrawWrapper = () => {
 
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
   const recordingControllerRef = useRef<RecorderController | null>(null);
-  const recordingSettingsRef = useRef(recordingSettings);
   const cursorPositionRef = useRef<{ x: number; y: number } | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
   const cameraStreamRef = useRef<MediaStream | null>(null);
   const recordingMimeTypeRef = useRef<string | null>(null);
+
+  const [excalidrawAPI, excalidrawRefCallback] =
+    useCallbackRefState<ExcalidrawImperativeAPI>();
+
+  const [, setShareDialogState] = useAtom(shareDialogStateAtom);
+  const [collabAPI] = useAtom(collabAPIAtom);
+  const [isCollaborating] = useAtomWithInitialValue(isCollaboratingAtom, () => {
+    return isCollaborationLink(window.location.href);
+  });
+  const collabError = useAtomValue(collabErrorIndicatorAtom);
+  const [recordingDialogState, setRecordingDialogState] = useAtom(
+    recordingDialogStateAtom,
+  );
+  const [recordingSettings, setRecordingSettings] = useAtom(
+    recordingSettingsAtom,
+  );
+  const [recordingSession, setRecordingSession] = useAtom(
+    recordingSessionAtom,
+  );
+  const recordingSettingsRef = useRef(recordingSettings);
 
   useEffect(() => {
     trackEvent("load", "frame", getFrame());
@@ -468,25 +487,6 @@ const ExcalidrawWrapper = () => {
 
     return () => window.clearInterval(interval);
   }, [recordingSession.status, recordingSession.startedAt, setRecordingSession]);
-
-  const [excalidrawAPI, excalidrawRefCallback] =
-    useCallbackRefState<ExcalidrawImperativeAPI>();
-
-  const [, setShareDialogState] = useAtom(shareDialogStateAtom);
-  const [collabAPI] = useAtom(collabAPIAtom);
-  const [isCollaborating] = useAtomWithInitialValue(isCollaboratingAtom, () => {
-    return isCollaborationLink(window.location.href);
-  });
-  const collabError = useAtomValue(collabErrorIndicatorAtom);
-  const [recordingDialogState, setRecordingDialogState] = useAtom(
-    recordingDialogStateAtom,
-  );
-  const [recordingSettings, setRecordingSettings] = useAtom(
-    recordingSettingsAtom,
-  );
-  const [recordingSession, setRecordingSession] = useAtom(
-    recordingSessionAtom,
-  );
 
   useHandleLibrary({
     excalidrawAPI,
@@ -968,10 +968,10 @@ const ExcalidrawWrapper = () => {
       const extension = getFileExtension(mimeType);
       const name = `excalidraw-recording-${new Date()
         .toISOString()
-        .replace(/[:.]/g, \"-\")}`;
+        .replace(/[:.]/g, "-")}`;
       await fileSave(blob, {
         fileName: `${name}.${extension}`,
-        description: \"Excalidraw recording\",
+        description: "Excalidraw recording",
         extensions: [`.${extension}`],
         mimeTypes: [mimeType],
       });
