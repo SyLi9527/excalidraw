@@ -33,12 +33,22 @@
       color: var(--text-primary-color);
       cursor: pointer;
       font-size: 0.875rem;
-      transition: border-color 150ms ease, background-color 150ms ease;
+      transition: transform 150ms ease;
 
       &.is-selected {
         border-color: var(--color-primary);
         background: var(--color-surface-primary-container);
       }
+    }
+
+    &__ratioButton:hover {
+      border-color: var(--color-primary);
+      background: var(--color-surface-primary-container);
+    }
+
+    &__ratioButton:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
     }
 
     &__backgrounds {
@@ -66,12 +76,21 @@
       border: 1px solid var(--dialog-border-color);
       background: var(--island-bg-color);
       cursor: pointer;
-      transition: border-color 150ms ease, transform 150ms ease;
+      transition: transform 150ms ease;
 
       &.is-selected {
         border-color: var(--color-primary);
         transform: translateY(-1px);
       }
+    }
+
+    &__backgroundSwatch:hover {
+      border-color: var(--color-primary);
+    }
+
+    &__backgroundSwatch:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
     }
 
     &__backgroundPreview {
@@ -95,6 +114,15 @@
     &__startButton {
       min-height: 44px;
       padding: 0 1.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .RecordingDialog {
+      &__ratioButton,
+      &__backgroundSwatch {
+        transition: none;
+      }
     }
   }
 
@@ -170,8 +198,26 @@
       justify-content: space-between;
       padding: 0.5rem 0.75rem;
       background: var(--color-surface-primary-container);
-      cursor: grab;
+      gap: 0.5rem;
       user-select: none;
+    }
+
+    &__dragHandle {
+      min-height: 32px;
+      min-width: 32px;
+      padding: 0 0.5rem;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--dialog-border-color);
+      background: var(--island-bg-color);
+      cursor: grab;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    &__dragHandle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
     }
 
     &__title {
@@ -214,6 +260,12 @@
       line-height: 1.4;
       resize: none;
       outline: none;
+    }
+
+    &__textarea:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-radius: var(--border-radius-md);
     }
   }
 
