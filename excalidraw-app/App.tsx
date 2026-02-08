@@ -12,6 +12,7 @@ import {
   CommandPalette,
   DEFAULT_CATEGORIES,
 } from "@excalidraw/excalidraw/components/CommandPalette/CommandPalette";
+import { Button } from "@excalidraw/excalidraw/components/Button";
 import { ErrorDialog } from "@excalidraw/excalidraw/components/ErrorDialog";
 import { OverwriteConfirmDialog } from "@excalidraw/excalidraw/components/OverwriteConfirm/OverwriteConfirm";
 import { openConfirmModal } from "@excalidraw/excalidraw/components/OverwriteConfirm/OverwriteConfirmState";
@@ -56,6 +57,7 @@ import {
 import { newElementWith } from "@excalidraw/element";
 import { isInitializedImageElement } from "@excalidraw/element";
 import clsx from "clsx";
+import { fileSave } from "browser-fs-access";
 import {
   parseLibraryTokensFromUrl,
   useHandleLibrary,
@@ -139,6 +141,21 @@ import DebugCanvas, {
 } from "./components/DebugCanvas";
 import { AIComponents } from "./components/AI";
 import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
+import { RecordingDialog } from "./recording/RecordingDialog";
+import { RecordingHUD } from "./recording/RecordingHUD";
+import { TeleprompterOverlay } from "./recording/TeleprompterOverlay";
+import { recordingBackgrounds } from "./recording/backgrounds";
+import {
+  recordingDialogStateAtom,
+  recordingSettingsAtom,
+  recordingSessionAtom,
+} from "./recording/recordingAtoms";
+import { RecorderController } from "./recording/RecorderController";
+import {
+  getFileExtension,
+  getSupportedMimeType,
+} from "./recording/recordingFormats";
+import { saveRecordingSettings } from "./recording/recordingSettings";
 
 import "./index.scss";
 
@@ -390,6 +407,12 @@ const ExcalidrawWrapper = () => {
   }
 
   const debugCanvasRef = useRef<HTMLCanvasElement>(null);
+  const recordingControllerRef = useRef<RecorderController | null>(null);
+  const recordingSettingsRef = useRef(recordingSettings);
+  const cursorPositionRef = useRef<{ x: number; y: number } | null>(null);
+  const audioStreamRef = useRef<MediaStream | null>(null);
+  const cameraStreamRef = useRef<MediaStream | null>(null);
+  const recordingMimeTypeRef = useRef<string | null>(null);
 
   useEffect(() => {
     trackEvent("load", "frame", getFrame());
@@ -398,6 +421,53 @@ const ExcalidrawWrapper = () => {
       trackEvent("load", "version", getVersion());
     }, VERSION_TIMEOUT);
   }, []);
+
+  useEffect(() => {
+    recordingSettingsRef.current = recordingSettings;
+    saveRecordingSettings(recordingSettings);
+  }, [recordingSettings]);
+
+  useEffect(() => {
+    if (!excalidrawAPI) {
+      return;
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const appState = excalidrawAPI.getAppState();
+      const x = event.clientX - appState.offsetLeft;
+      const y = event.clientY - appState.offsetTop;
+      if (x >= 0 && y >= 0 && x <= appState.width && y <= appState.height) {
+        cursorPositionRef.current = { x, y };
+      } else {
+        cursorPositionRef.current = null;
+      }
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+    };
+  }, [excalidrawAPI]);
+
+  useEffect(() => {
+    if (
+      recordingSession.status !== "recording" ||
+      recordingSession.startedAt === null
+    ) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setRecordingSession((prev) => {
+        if (prev.startedAt === null) {
+          return prev;
+        }
+        return { ...prev, elapsedMs: Date.now() - prev.startedAt };
+      });
+    }, 250);
+
+    return () => window.clearInterval(interval);
+  }, [recordingSession.status, recordingSession.startedAt, setRecordingSession]);
 
   const [excalidrawAPI, excalidrawRefCallback] =
     useCallbackRefState<ExcalidrawImperativeAPI>();
@@ -408,6 +478,15 @@ const ExcalidrawWrapper = () => {
     return isCollaborationLink(window.location.href);
   });
   const collabError = useAtomValue(collabErrorIndicatorAtom);
+  const [recordingDialogState, setRecordingDialogState] = useAtom(
+    recordingDialogStateAtom,
+  );
+  const [recordingSettings, setRecordingSettings] = useAtom(
+    recordingSettingsAtom,
+  );
+  const [recordingSession, setRecordingSession] = useAtom(
+    recordingSessionAtom,
+  );
 
   useHandleLibrary({
     excalidrawAPI,
@@ -764,6 +843,154 @@ const ExcalidrawWrapper = () => {
     );
   };
 
+  const stopMediaStreams = () => {
+    audioStreamRef.current?.getTracks().forEach((track) => track.stop());
+    cameraStreamRef.current?.getTracks().forEach((track) => track.stop());
+    audioStreamRef.current = null;
+    cameraStreamRef.current = null;
+  };
+
+  const startRecording = useCallback(async () => {
+    if (!excalidrawAPI) {
+      return;
+    }
+    if (recordingSession.status !== "idle") {
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setErrorMessage(t("recording.micPermissionDenied"));
+      return;
+    }
+
+    let audioStream: MediaStream;
+    try {
+      audioStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
+    } catch (error) {
+      setErrorMessage(t("recording.micPermissionDenied"));
+      return;
+    }
+
+    audioStreamRef.current = audioStream;
+
+    let cameraStream: MediaStream | null = null;
+    if (recordingSettingsRef.current.cameraEnabled) {
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+      } catch {
+        cameraStream = null;
+      }
+    }
+    cameraStreamRef.current = cameraStream;
+
+    const mimeType =
+      typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported
+        ? getSupportedMimeType()
+        : "video/webm";
+
+    recordingMimeTypeRef.current = mimeType;
+
+    const controller = new RecorderController({
+      mimeType,
+      getSceneElements: () => excalidrawAPI.getSceneElements(),
+      getAppState: () => excalidrawAPI.getAppState(),
+      getFiles: () => excalidrawAPI.getFiles(),
+      getCursorPosition: () => cursorPositionRef.current,
+      getAudioStream: () => audioStreamRef.current,
+      getCameraStream: () => cameraStreamRef.current,
+      getSettings: () => recordingSettingsRef.current,
+      backgrounds: recordingBackgrounds,
+    });
+
+    recordingControllerRef.current = controller;
+
+    try {
+      await controller.start();
+      setRecordingSession({
+        status: "recording",
+        startedAt: Date.now(),
+        elapsedMs: 0,
+      });
+      setRecordingDialogState({ isOpen: false });
+    } catch (error) {
+      stopMediaStreams();
+      setErrorMessage(t("recording.downloadFailed"));
+    }
+  }, [
+    excalidrawAPI,
+    recordingSession.status,
+    setErrorMessage,
+    setRecordingDialogState,
+    setRecordingSession,
+  ]);
+
+  const pauseRecording = useCallback(() => {
+    const controller = recordingControllerRef.current;
+    if (!controller) {
+      return;
+    }
+    controller.pause();
+    setRecordingSession((prev) => ({
+      ...prev,
+      status: "paused",
+      elapsedMs: prev.startedAt ? Date.now() - prev.startedAt : prev.elapsedMs,
+      startedAt: null,
+    }));
+  }, [setRecordingSession]);
+
+  const resumeRecording = useCallback(() => {
+    const controller = recordingControllerRef.current;
+    if (!controller) {
+      return;
+    }
+    controller.resume();
+    setRecordingSession((prev) => ({
+      ...prev,
+      status: "recording",
+      startedAt: Date.now() - prev.elapsedMs,
+    }));
+  }, [setRecordingSession]);
+
+  const stopRecording = useCallback(async () => {
+    const controller = recordingControllerRef.current;
+    if (!controller) {
+      return;
+    }
+    try {
+      const blob = await controller.stop();
+      const mimeType = recordingMimeTypeRef.current || "video/webm";
+      const extension = getFileExtension(mimeType);
+      const name = `excalidraw-recording-${new Date()
+        .toISOString()
+        .replace(/[:.]/g, \"-\")}`;
+      await fileSave(blob, {
+        fileName: `${name}.${extension}`,
+        description: \"Excalidraw recording\",
+        extensions: [`.${extension}`],
+        mimeTypes: [mimeType],
+      });
+    } catch (error: any) {
+      if (error?.name !== "AbortError") {
+        setErrorMessage(t("recording.downloadFailed"));
+      }
+    } finally {
+      recordingControllerRef.current = null;
+      recordingMimeTypeRef.current = null;
+      stopMediaStreams();
+      setRecordingSession({
+        status: "idle",
+        startedAt: null,
+        elapsedMs: 0,
+      });
+    }
+  }, [setErrorMessage, setRecordingSession]);
+
   const isOffline = useAtomValue(isOfflineAtom);
 
   const localStorageQuotaExceeded = useAtomValue(localStorageQuotaExceededAtom);
@@ -772,6 +999,22 @@ const ExcalidrawWrapper = () => {
     () => setShareDialogState({ isOpen: true, type: "collaborationOnly" }),
     [setShareDialogState],
   );
+
+  const recordingDialogLabels = {
+    title: t("recording.title"),
+    start: t("recording.start"),
+    aspectRatio: t("recording.aspectRatio"),
+    background: t("recording.background"),
+    cursorHighlight: t("recording.cursorHighlight"),
+    camera: t("recording.camera"),
+    teleprompter: t("recording.teleprompter"),
+  };
+
+  const recordingHUDLabels = {
+    pause: t("recording.pause"),
+    resume: t("recording.resume"),
+    stop: t("recording.stop"),
+  };
 
   // browsers generally prevent infinite self-embedding, there are
   // cases where it still happens, and while we disallow self-embedding
@@ -883,26 +1126,38 @@ const ExcalidrawWrapper = () => {
         autoFocus={true}
         theme={editorTheme}
         renderTopRightUI={(isMobile) => {
-          if (isMobile || !collabAPI || isCollabDisabled) {
+          if (isMobile) {
             return null;
           }
 
           return (
             <div className="excalidraw-ui-top-right">
+              <Button
+                onSelect={() => setRecordingDialogState({ isOpen: true })}
+                className="RecordingTrigger"
+              >
+                {t("recording.title")}
+              </Button>
               {excalidrawAPI?.getEditorInterface().formFactor === "desktop" && (
                 <ExcalidrawPlusPromoBanner
                   isSignedIn={isExcalidrawPlusSignedUser}
                 />
               )}
 
-              {collabError.message && <CollabError collabError={collabError} />}
-              <LiveCollaborationTrigger
-                isCollaborating={isCollaborating}
-                onSelect={() =>
-                  setShareDialogState({ isOpen: true, type: "share" })
-                }
-                editorInterface={editorInterface}
-              />
+              {!isCollabDisabled && collabAPI && (
+                <>
+                  {collabError.message && (
+                    <CollabError collabError={collabError} />
+                  )}
+                  <LiveCollaborationTrigger
+                    isCollaborating={isCollaborating}
+                    onSelect={() =>
+                      setShareDialogState({ isOpen: true, type: "share" })
+                    }
+                    editorInterface={editorInterface}
+                  />
+                </>
+              )}
             </div>
           );
         }}
@@ -947,6 +1202,49 @@ const ExcalidrawWrapper = () => {
         </OverwriteConfirmDialog>
         <AppFooter onChange={() => excalidrawAPI?.refresh()} />
         {excalidrawAPI && <AIComponents excalidrawAPI={excalidrawAPI} />}
+        <RecordingDialog
+          isOpen={recordingDialogState.isOpen}
+          settings={recordingSettings}
+          backgrounds={recordingBackgrounds}
+          labels={recordingDialogLabels}
+          onClose={() => setRecordingDialogState({ isOpen: false })}
+          onSettingsChange={setRecordingSettings}
+          onStart={startRecording}
+        />
+        <RecordingHUD
+          status={recordingSession.status}
+          elapsedMs={recordingSession.elapsedMs}
+          labels={recordingHUDLabels}
+          onPause={pauseRecording}
+          onResume={resumeRecording}
+          onStop={stopRecording}
+          micEnabled={Boolean(audioStreamRef.current)}
+          cameraEnabled={Boolean(cameraStreamRef.current)}
+        />
+        <TeleprompterOverlay
+          enabled={recordingSettings.teleprompterEnabled}
+          text={recordingSettings.teleprompterText}
+          opacity={recordingSettings.teleprompterOpacity}
+          speed={recordingSettings.teleprompterSpeed}
+          onTextChange={(text) =>
+            setRecordingSettings((prev) => ({
+              ...prev,
+              teleprompterText: text,
+            }))
+          }
+          onOpacityChange={(opacity) =>
+            setRecordingSettings((prev) => ({
+              ...prev,
+              teleprompterOpacity: opacity,
+            }))
+          }
+          onSpeedChange={(speed) =>
+            setRecordingSettings((prev) => ({
+              ...prev,
+              teleprompterSpeed: speed,
+            }))
+          }
+        />
 
         <TTDDialogTrigger />
         {isCollaborating && isOffline && (

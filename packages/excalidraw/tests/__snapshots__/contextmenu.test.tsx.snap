@@ -172,6 +172,51 @@ exports[`contextMenu element > right-clicking on a group should select whole gro
         },
         "viewMode": true,
       },
+      {
+        "PanelComponent": [Function],
+        "icon": <svg
+          aria-hidden="true"
+          className=""
+          fill="none"
+          focusable="false"
+          role="img"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              d="M0 0h24v24H0z"
+              stroke="none"
+            />
+            <path
+              d="M6 21l15 -15l-3 -3l-15 15l3 3"
+            />
+            <path
+              d="M15 6l3 3"
+            />
+            <path
+              d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"
+            />
+            <path
+              d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"
+            />
+          </g>
+        </svg>,
+        "label": "buttons.breakApartSvg",
+        "name": "breakApartSvg",
+        "perform": [Function],
+        "predicate": [Function],
+        "trackEvent": {
+          "action": "break_apart_svg",
+          "category": "element",
+        },
+      },
       "separator",
       {
         "icon": <svg

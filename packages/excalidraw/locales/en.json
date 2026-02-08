@@ -701,6 +701,21 @@
     "itemNotAvailable": "Command is not available...",
     "shortcutHint": "For Command palette, use {{shortcut}}"
   },
+  "recording": {
+    "title": "Record",
+    "start": "Start recording",
+    "stop": "Stop",
+    "pause": "Pause",
+    "resume": "Resume",
+    "aspectRatio": "Aspect ratio",
+    "background": "Background",
+    "cursorHighlight": "Cursor highlight",
+    "camera": "Camera",
+    "teleprompter": "Teleprompter",
+    "formatAuto": "Auto",
+    "downloadFailed": "Recording download failed.",
+    "micPermissionDenied": "Microphone permission denied."
+  },
   "keys": {
     "ctrl": "Ctrl",
     "option": "Option",

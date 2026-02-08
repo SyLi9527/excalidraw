@@ -701,6 +701,21 @@
     "itemNotAvailable": "命令不可用……",
     "shortcutHint": "用 {{shortcut}} 打开命令面板"
   },
+  "recording": {
+    "title": "录制",
+    "start": "开始录制",
+    "stop": "停止",
+    "pause": "暂停",
+    "resume": "继续",
+    "aspectRatio": "画面比例",
+    "background": "背景",
+    "cursorHighlight": "光标高亮",
+    "camera": "摄像头",
+    "teleprompter": "提词器",
+    "formatAuto": "自动",
+    "downloadFailed": "录制下载失败。",
+    "micPermissionDenied": "麦克风权限被拒绝。"
+  },
   "keys": {
     "ctrl": "Ctrl",
     "option": "Option",
