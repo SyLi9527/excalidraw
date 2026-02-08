@@ -78,6 +78,7 @@ describe("contextMenu element", () => {
 
     mouse.reset();
     mouse.down(0, 0);
+    unmountComponent();
   });
 
   it("shows context menu for canvas", () => {

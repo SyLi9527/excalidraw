@@ -447,7 +447,13 @@ type Element<T extends DrawingToolName> = T extends "line" | "freedraw"
 
 export class UI {
   static clickTool = (toolName: ToolType | "lock") => {
-    fireEvent.click(GlobalTestState.renderResult.getByToolName(toolName));
+    const tools = GlobalTestState.renderResult.getAllByToolName(toolName);
+    const preferred =
+      tools.find((tool) => !tool.closest(".tool-popover-content")) ?? tools[0];
+    const label = preferred.closest("label") ?? preferred;
+    fireEvent.pointerDown(label, { pointerType: "mouse" });
+    fireEvent.pointerUp(label, { pointerType: "mouse" });
+    fireEvent.click(preferred);
   };
 
   static clickLabeledElement = (label: string) => {
