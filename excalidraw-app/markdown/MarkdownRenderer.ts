@@ -5,6 +5,7 @@ export type MarkdownRenderResult = {
 };
 
 import { renderMermaid } from "./renderers/mermaidRenderer";
+import { renderVega, renderVegaLite } from "./renderers/vegaRenderer";
 
 const encodeSvg = (svg: string) =>
   btoa(unescape(encodeURIComponent(svg)));
@@ -15,6 +16,14 @@ export const renderMarkdownToImage = async (
   const mermaidMatch = markdown.match(/```mermaid\s*([\s\S]*?)```/m);
   if (mermaidMatch) {
     return renderMermaid(mermaidMatch[1].trim());
+  }
+  const vegaLiteMatch = markdown.match(/```vega-lite\s*([\s\S]*?)```/m);
+  if (vegaLiteMatch) {
+    return renderVegaLite(JSON.parse(vegaLiteMatch[1].trim()));
+  }
+  const vegaMatch = markdown.match(/```vega\s*([\s\S]*?)```/m);
+  if (vegaMatch) {
+    return renderVega(JSON.parse(vegaMatch[1].trim()));
   }
   const width = 400;
   const height = 200;
