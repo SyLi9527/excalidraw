@@ -7,6 +7,7 @@ export type MarkdownRenderResult = {
 import { renderMermaid } from "./renderers/mermaidRenderer";
 import { renderVega, renderVegaLite } from "./renderers/vegaRenderer";
 import { renderGraphviz } from "./renderers/graphvizRenderer";
+import { renderDrawio } from "./renderers/drawioRenderer";
 
 const encodeSvg = (svg: string) =>
   btoa(unescape(encodeURIComponent(svg)));
@@ -29,6 +30,10 @@ export const renderMarkdownToImage = async (
   const graphvizMatch = markdown.match(/```graphviz\s*([\s\S]*?)```/m);
   if (graphvizMatch) {
     return renderGraphviz(graphvizMatch[1].trim());
+  }
+  const drawioMatch = markdown.match(/```drawio\s*([\s\S]*?)```/m);
+  if (drawioMatch) {
+    return renderDrawio(drawioMatch[1].trim());
   }
   const width = 400;
   const height = 200;
