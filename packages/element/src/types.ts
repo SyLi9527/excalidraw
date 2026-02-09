@@ -155,6 +155,21 @@ export type ExcalidrawImageElement = _ExcalidrawElementBase &
     crop: ImageCrop | null;
   }>;
 
+export type ExcalidrawMarkdownElement = _ExcalidrawElementBase &
+  Readonly<{
+    type: "markdown";
+    markdown: string;
+    renderConfig: {
+      theme: "light" | "dark";
+      fontSize: number;
+    };
+    renderCache: {
+      dataURL: string;
+      width: number;
+      height: number;
+    } | null;
+  }>;
+
 export type InitializedExcalidrawImageElement = MarkNonNullable<
   ExcalidrawImageElement,
   "fileId"
@@ -210,6 +225,7 @@ export type ExcalidrawElement =
   | ExcalidrawArrowElement
   | ExcalidrawFreeDrawElement
   | ExcalidrawImageElement
+  | ExcalidrawMarkdownElement
   | ExcalidrawFrameElement
   | ExcalidrawMagicFrameElement
   | ExcalidrawIframeElement

@@ -24,6 +24,7 @@ import type {
   ExcalidrawIframeElement,
   ExcalidrawIframeLikeElement,
   ExcalidrawMagicFrameElement,
+  ExcalidrawMarkdownElement,
   ExcalidrawArrowElement,
   ExcalidrawElbowArrowElement,
   ExcalidrawLineElement,
@@ -67,6 +68,12 @@ export const isTextElement = (
   element: ExcalidrawElement | null,
 ): element is ExcalidrawTextElement => {
   return element != null && element.type === "text";
+};
+
+export const isMarkdownElement = (
+  element: ExcalidrawElement | null,
+): element is ExcalidrawMarkdownElement => {
+  return element != null && element.type === "markdown";
 };
 
 export const isFrameElement = (
@@ -261,6 +268,7 @@ export const isExcalidrawElement = (
     case "frame":
     case "magicframe":
     case "image":
+    case "markdown":
     case "selection": {
       return true;
     }
