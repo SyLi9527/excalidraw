@@ -716,6 +716,10 @@
     "downloadFailed": "录制下载失败，请重试。",
     "micPermissionDenied": "麦克风权限被拒绝，请在浏览器设置中允许后重试。"
   },
+  "markdown": {
+    "title": "Markdown",
+    "renderError": "Markdown 渲染失败，请检查语法后重试。"
+  },
   "keys": {
     "ctrl": "Ctrl",
     "option": "Option",

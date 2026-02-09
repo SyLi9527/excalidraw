@@ -716,6 +716,10 @@
     "downloadFailed": "Recording download failed. Try again.",
     "micPermissionDenied": "Microphone permission denied. Allow access and try again."
   },
+  "markdown": {
+    "title": "Markdown",
+    "renderError": "Markdown rendering failed. Check your syntax and try again."
+  },
   "keys": {
     "ctrl": "Ctrl",
     "option": "Option",
