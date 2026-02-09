@@ -62,6 +62,7 @@ import {
   hasBoundTextElement,
   isMagicFrameElement,
   isImageElement,
+  isMarkdownElement,
 } from "./typeChecks";
 import { getContainingFrame } from "./frame";
 import { getCornerRadius } from "./utils";
@@ -884,9 +885,21 @@ export const renderElement = (
     case "line":
     case "arrow":
     case "image":
+    case "markdown":
     case "text":
     case "iframe":
     case "embeddable": {
+      if (isMarkdownElement(element) && element.renderCache?.dataURL) {
+        const img = new Image();
+        img.src = element.renderCache.dataURL;
+        img.onload = () => {
+          context.save();
+          context.translate(appState.scrollX, appState.scrollY);
+          context.drawImage(img, element.x, element.y, element.width, element.height);
+          context.restore();
+        };
+        break;
+      }
       if (renderConfig.isExporting) {
         const [x1, y1, x2, y2] = getElementAbsoluteCoords(element, elementsMap);
         const cx = (x1 + x2) / 2 + appState.scrollX;
