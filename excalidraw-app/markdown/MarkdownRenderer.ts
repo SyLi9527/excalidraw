@@ -4,12 +4,18 @@ export type MarkdownRenderResult = {
   height: number;
 };
 
+import { renderMermaid } from "./renderers/mermaidRenderer";
+
 const encodeSvg = (svg: string) =>
   btoa(unescape(encodeURIComponent(svg)));
 
 export const renderMarkdownToImage = async (
   markdown: string,
 ): Promise<MarkdownRenderResult> => {
+  const mermaidMatch = markdown.match(/```mermaid\s*([\s\S]*?)```/m);
+  if (mermaidMatch) {
+    return renderMermaid(mermaidMatch[1].trim());
+  }
   const width = 400;
   const height = 200;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
