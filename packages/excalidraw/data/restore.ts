@@ -41,6 +41,7 @@ import {
   isElbowArrow,
   isLinearElement,
   isLineElement,
+  isMarkdownElement,
   isTextElement,
   isUsingAdaptiveRadius,
 } from "@excalidraw/element";
@@ -71,6 +72,7 @@ import type {
   OrderedExcalidrawElement,
   StrokeRoundness,
 } from "@excalidraw/element/types";
+import { newMarkdownElement } from "@excalidraw/element/newElement";
 
 import type { MarkOptional, Mutable } from "@excalidraw/common/utility-types";
 
@@ -399,6 +401,15 @@ export const restoreElement = (
         fileId: element.fileId,
         scale: element.scale || [1, 1],
         crop: element.crop ?? null,
+      });
+    case "markdown":
+      return restoreElementWithProperties(element, {
+        markdown: element.markdown ?? "",
+        renderConfig: element.renderConfig ?? {
+          theme: "light",
+          fontSize: 14,
+        },
+        renderCache: element.renderCache ?? null,
       });
     case "line":
     // @ts-ignore LEGACY type

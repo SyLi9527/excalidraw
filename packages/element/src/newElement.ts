@@ -30,6 +30,7 @@ import { isLineElement } from "./typeChecks";
 import type {
   ExcalidrawElement,
   ExcalidrawImageElement,
+  ExcalidrawMarkdownElement,
   ExcalidrawTextElement,
   ExcalidrawLinearElement,
   ExcalidrawGenericElement,
@@ -48,6 +49,7 @@ import type {
   ExcalidrawArrowElement,
   ExcalidrawElbowArrowElement,
   ExcalidrawLineElement,
+  ExcalidrawMarkdownElement,
 } from "./types";
 
 export type ElementConstructorOpts = MarkOptional<
@@ -542,5 +544,19 @@ export const newImageElement = (
     fileId: opts.fileId ?? null,
     scale: opts.scale ?? [1, 1],
     crop: opts.crop ?? null,
+  };
+};
+
+export const newMarkdownElement = (
+  opts: {
+    markdown?: ExcalidrawMarkdownElement["markdown"];
+    renderConfig?: ExcalidrawMarkdownElement["renderConfig"];
+  } & ElementConstructorOpts,
+): NonDeleted<ExcalidrawMarkdownElement> => {
+  return {
+    ..._newElementBase<ExcalidrawMarkdownElement>("markdown", opts),
+    markdown: opts.markdown ?? "",
+    renderConfig: opts.renderConfig ?? { theme: "light", fontSize: 14 },
+    renderCache: null,
   };
 };
