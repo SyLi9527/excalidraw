@@ -128,3 +128,18 @@
     }
   }
 }
+
+.MarkdownEditor {
+  display: grid;
+  gap: 12px;
+}
+
+.MarkdownEditor__preview {
+  border: 1px solid var(--dialog-border-color);
+  padding: 8px;
+  background: var(--island-bg-color);
+}
+
+.MarkdownDialog {
+  padding: 16px;
+}
