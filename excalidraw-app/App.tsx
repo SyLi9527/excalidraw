@@ -49,6 +49,7 @@ import {
   youtubeIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { isElementLink } from "@excalidraw/element";
+import { newMarkdownElement } from "@excalidraw/element/newElement";
 import {
   bumpElementVersions,
   restoreAppState,
@@ -144,6 +145,9 @@ import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 import { RecordingDialog } from "./recording/RecordingDialog";
 import { RecordingHUD } from "./recording/RecordingHUD";
 import { TeleprompterOverlay } from "./recording/TeleprompterOverlay";
+import { MarkdownDialog } from "./markdown/MarkdownDialog";
+import { RenderTaskManager } from "./markdown/RenderTaskManager";
+import { renderMarkdownToImage } from "./markdown/MarkdownRenderer";
 import { recordingBackgrounds } from "./recording/backgrounds";
 import {
   recordingDialogStateAtom,
@@ -432,6 +436,11 @@ const ExcalidrawWrapper = () => {
     recordingSessionAtom,
   );
   const recordingSettingsRef = useRef(recordingSettings);
+  const [markdownDialogOpen, setMarkdownDialogOpen] = useState(false);
+  const [markdownDraft, setMarkdownDraft] = useState("# Hello");
+  const markdownTaskManagerRef = useRef(new RenderTaskManager());
+  const [markdownPreviewHtml, setMarkdownPreviewHtml] = useState("");
+  const markdownElementIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     trackEvent("load", "frame", getFrame());
@@ -467,6 +476,39 @@ const ExcalidrawWrapper = () => {
       window.removeEventListener("pointermove", handlePointerMove);
     };
   }, [excalidrawAPI]);
+
+  useEffect(() => {
+    if (!markdownDialogOpen || !excalidrawAPI) {
+      return;
+    }
+
+    markdownTaskManagerRef.current.abort();
+
+    markdownTaskManagerRef.current.enqueue(async (signal) => {
+      const result = await renderMarkdownToImage(markdownDraft);
+      if (signal.aborted) {
+        return;
+      }
+
+      if (markdownElementIdRef.current) {
+        excalidrawAPI.updateScene({
+          elements: excalidrawAPI
+            .getSceneElements()
+            .map((element) =>
+              element.id === markdownElementIdRef.current
+                ? {
+                    ...element,
+                    renderCache: result,
+                    markdown: markdownDraft,
+                  }
+                : element,
+            ),
+        });
+      }
+
+      setMarkdownPreviewHtml(`<h1>${markdownDraft.replace("# ", "")}</h1>`);
+    });
+  }, [markdownDialogOpen, markdownDraft, excalidrawAPI]);
 
   useEffect(() => {
     if (
@@ -1133,6 +1175,29 @@ const ExcalidrawWrapper = () => {
           return (
             <div className="excalidraw-ui-top-right">
               <Button
+                onSelect={() => {
+                  if (!excalidrawAPI) {
+                    return;
+                  }
+                  const element = newMarkdownElement({
+                    x: 100,
+                    y: 100,
+                    width: 300,
+                    height: 200,
+                    markdown: "# Hello",
+                    renderConfig: { theme: "light", fontSize: 14 },
+                  });
+                  excalidrawAPI.updateScene({
+                    elements: [...excalidrawAPI.getSceneElements(), element],
+                  });
+                  markdownElementIdRef.current = element.id;
+                  setMarkdownDraft("# Hello");
+                  setMarkdownDialogOpen(true);
+                }}
+              >
+                Markdown
+              </Button>
+              <Button
                 onSelect={() => setRecordingDialogState({ isOpen: true })}
                 className="RecordingTrigger"
               >
@@ -1210,6 +1275,13 @@ const ExcalidrawWrapper = () => {
           onClose={() => setRecordingDialogState({ isOpen: false })}
           onSettingsChange={setRecordingSettings}
           onStart={startRecording}
+        />
+        <MarkdownDialog
+          open={markdownDialogOpen}
+          value={markdownDraft}
+          previewHtml={markdownPreviewHtml}
+          onChange={setMarkdownDraft}
+          onClose={() => setMarkdownDialogOpen(false)}
         />
         <RecordingHUD
           status={recordingSession.status}
